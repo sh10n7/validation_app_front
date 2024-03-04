@@ -3,7 +3,7 @@
 
   <Form>
     <label for="nickname">ニックネーム</label>
-    <Field type="text" id="nickname" class="input-field" name="nickname" rules="required"/>
+    <Field type="text" id="nickname" class="input-field" name="nickname" rules="required|japaneseText"/>
     <ErrorMessage name="nickname" class="error-message"/>
     
     <label for="email">メールアドレス</label>
@@ -30,6 +30,15 @@ defineRule('required', required);
 defineRule('email', email);
 defineRule('min', min);
 defineRule('confirmed', confirmed);
+
+// 全角ひらがな、カタカナ、漢字のみ許容する独自ルールを追加。valueに入力された値が入る。
+defineRule('japaneseText', (value) => {
+  // 全角ひらがな、カタカナ、漢字が入力された場合はtrueを返し、含まれない場合はエラーメッセージを表示。
+  if (/^[ぁ-んァ-ン一-龥]+$/.test(value)) {
+    return true;
+  }
+  return 'Nickname should be in full-width Hiragana, Katakana, or Kanji characters.'
+})
 
 export default {
   name: 'UserForm',

@@ -3,21 +3,20 @@
 
   <Form>
     <label for="nickname">ニックネーム</label>
-    <!-- 必須(required)のバリデーション追加 -->
     <Field type="text" id="nickname" class="input-field" name="nickname" rules="required"/>
+    <ErrorMessage name="nickname" class="error-message"/>
     
-
     <label for="email">メールアドレス</label>
-    <!-- 必須(required)、emailに関するバリデーション追加 -->
     <Field type="email" id="email" class="input-field" name="email" rules="required|email"/>
+    <ErrorMessage name="email" class="error-message"/>
 
     <label for="password">パスワード</label>
-    <!-- 必須(required)、最小文字数に関するバリデーション追加 -->
     <Field type="password" id="password" name="password" class="input-field" rules="required|min:6"/>
+    <ErrorMessage name="password" class="error-message"/>
 
     <label for="password-confirmation">確認用パスワード</label>
-    <!-- 必須(required)、confirmed(確認用フィールドの検証)に関するバリデーション追加 -->
     <Field type="password" id="password-confirmation" name="password-confirmation" class="input-field" rules="required|confirmed:@password"/>
+    <ErrorMessage name="password-confirmation" class="error-message"/>
 
     <input type="submit" value="登録" id="submit-btn">
   </Form>
@@ -37,6 +36,7 @@ export default {
   components: {
     Form,
     Field,
+    ErrorMessage
   }
 }
 
@@ -51,10 +51,14 @@ form {
 
 .input-field {
   padding: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 #submit-btn {
   width: 160px;
+}
+
+.error-message {
+  color: red;
 }
 </style>

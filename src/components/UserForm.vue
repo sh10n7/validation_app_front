@@ -1,26 +1,36 @@
 <template>
   <h2>ユーザー登録</h2>
-  <!-- <Form>コンポーネントを使用して、Fieldコンポーネントを囲む -->
+
   <Form>
     <label for="nickname">ニックネーム</label>
-    <!-- Fieldコンポーネントを使用して、入力フォームを作成する -->
-    <Field type="text" id="nickname" class="input-field" />
+    <!-- 必須(required)のバリデーション追加 -->
+    <Field type="text" id="nickname" class="input-field" name="nickname" rules="required"/>
+    
 
     <label for="email">メールアドレス</label>
-    <Field type="email" id="email" class="input-field" />
+    <!-- 必須(required)、emailに関するバリデーション追加 -->
+    <Field type="email" id="email" class="input-field" name="email" rules="required|email"/>
 
     <label for="password">パスワード</label>
-    <Field type="password" id="password" class="input-field" />
+    <!-- 必須(required)、最小文字数に関するバリデーション追加 -->
+    <Field type="password" id="password" name="password" class="input-field" rules="required|min:6"/>
 
     <label for="password-confirmation">確認用パスワード</label>
-    <Field type="password" id="password-confirmation" class="input-field" />
+    <!-- 必須(required)、confirmed(確認用フィールドの検証)に関するバリデーション追加 -->
+    <Field type="password" id="password-confirmation" name="password-confirmation" class="input-field" rules="required|confirmed:@password"/>
 
     <input type="submit" value="登録" id="submit-btn">
   </Form>
 </template>
 
 <script>
-import { Form, Field } from 'vee-validate';
+import { Form, Field, defineRule, ErrorMessage  } from 'vee-validate';
+import { required, email, min, confirmed } from '@vee-validate/rules';
+
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('confirmed', confirmed);
 
 export default {
   name: 'UserForm',

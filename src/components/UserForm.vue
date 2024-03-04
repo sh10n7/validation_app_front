@@ -1,25 +1,52 @@
 <template>
   <h2>ユーザー登録</h2>
-  <form>
-    <label for="nickname">ニックネーム</label>
-    <input type="text" id="nickname" class="input-field">
 
+  <Form>
+    <label for="nickname">ニックネーム</label>
+    <Field type="text" id="nickname" class="input-field" name="nickname" rules="required|japaneseText"/>
+    <ErrorMessage name="nickname" class="error-message"/>
+    
     <label for="email">メールアドレス</label>
-    <input type="email" id="email" class="input-field">
+    <Field type="email" id="email" class="input-field" name="email" rules="required|email"/>
+    <ErrorMessage name="email" class="error-message"/>
 
     <label for="password">パスワード</label>
-    <input type="password" id="password" class="input-field">
+    <Field type="password" id="password" name="password" class="input-field" rules="required|min:6"/>
+    <ErrorMessage name="password" class="error-message"/>
 
     <label for="password-confirmation">確認用パスワード</label>
-    <input type="password" id="password-confirmation" class="input-field">
+    <Field type="password" id="password-confirmation" name="password-confirmation" class="input-field" rules="required|confirmed:@password"/>
+    <ErrorMessage name="password-confirmation" class="error-message"/>
 
     <input type="submit" value="登録" id="submit-btn">
-  </form>
+  </Form>
 </template>
 
 <script>
+import { Form, Field, defineRule, ErrorMessage  } from 'vee-validate';
+import { required, email, min, confirmed } from '@vee-validate/rules';
+
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('confirmed', confirmed);
+
+// 全角ひらがな、カタカナ、漢字のみ許容する独自ルールを追加。valueに入力された値が入る。
+defineRule('japaneseText', (value) => {
+  // 全角ひらがな、カタカナ、漢字が入力された場合はtrueを返し、含まれない場合はエラーメッセージを表示。
+  if (/^[ぁ-んァ-ン一-龥]+$/.test(value)) {
+    return true;
+  }
+  return 'Nickname should be in full-width Hiragana, Katakana, or Kanji characters.'
+})
+
 export default {
   name: 'UserForm',
+  components: {
+    Form,
+    Field,
+    ErrorMessage
+  }
 }
 
 </script>
@@ -33,10 +60,14 @@ form {
 
 .input-field {
   padding: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 #submit-btn {
   width: 160px;
+}
+
+.error-message {
+  color: red;
 }
 </style>
